@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "homedocs",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authhomedocs2840ad0c",
+      "Outputs.UserPoolId"
+    ]
+  }
+}
