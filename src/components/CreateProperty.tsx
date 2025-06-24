@@ -8,40 +8,15 @@ interface CreatePropertyProps {
   onSuccess: () => void;
 }
 
-const propertyTypes = [
-  'Primary Home',
-  'Vacation Home',
-  'Rental Property',
-  'Commercial',
-  'Land'
-];
-
-// Minimal safe mutation that avoids returning relational or protected fields
-const createPropertyCustom = /* GraphQL */ `
-  mutation CreateProperty($input: CreatePropertyInput!) {
-    createProperty(input: $input) {
-      id
-      type
-      address
-    }
-  }
-`;
-
 export default function CreateProperty({ onSuccess }: CreatePropertyProps) {
-  const [formData, setFormData] = useState({
-    type: '',
-    address: '',
-    mortgage: '',
-    rent: '',
-    insurance: '',
-    homeWarranty: '',
-    applianceInfo: '',
-    repairInfo: ''
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const [type, setType] = useState('');
+  const [address, setAddress] = useState('');
+  const [mortgage, setMortgage] = useState('');
+  const [rent, setRent] = useState('');
+  const [insurance, setInsurance] = useState('');
+  const [homeWarranty, setHomeWarranty] = useState('');
+  const [applianceInfo, setApplianceInfo] = useState('');
+  const [repairInfo, setRepairInfo] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,66 +25,115 @@ export default function CreateProperty({ onSuccess }: CreatePropertyProps) {
       const currentUser = await getCurrentUser();
       const userSub = currentUser?.userId;
 
-      const response = await client.graphql({
-        query: createPropertyCustom,
+      await client.graphql({
+        query: /* GraphQL */ `
+          mutation CreateProperty($input: CreatePropertyInput!) {
+            createProperty(input: $input) {
+              id
+              type
+              address
+              userID
+            }
+          }
+        `,
         variables: {
           input: {
-            ...formData,
-            userID: userSub
-          }
-        }
+            type,
+            address,
+            mortgage,
+            rent,
+            insurance,
+            homeWarranty,
+            applianceInfo,
+            repairInfo,
+            userID: userSub,
+          },
+        },
+        authMode: 'userPool',
       });
 
-      console.log("GraphQL response:", JSON.stringify(response, null, 2));
-
+      console.log('Property created successfully');
       onSuccess();
-
-      setFormData({
-        type: '',
-        address: '',
-        mortgage: '',
-        rent: '',
-        insurance: '',
-        homeWarranty: '',
-        applianceInfo: '',
-        repairInfo: ''
-      });
+      clearForm();
     } catch (err) {
       console.error('Submission error:', err);
-      alert("Error submitting property. See console for details.");
     }
   };
 
+  const clearForm = () => {
+    setType('');
+    setAddress('');
+    setMortgage('');
+    setRent('');
+    setInsurance('');
+    setHomeWarranty('');
+    setApplianceInfo('');
+    setRepairInfo('');
+  };
+
   return (
-    <details>
-      <summary>Add New Property</summary>
-      <form onSubmit={handleSubmit}>
-        <select
-          name="type"
-          value={formData.type}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Select Property Type</option>
-          {propertyTypes.map((type) => (
-            <option key={type} value={type}>{type}</option>
-          ))}
-        </select>
-        {Object.entries(formData).map(([key, value]) => {
-          if (key === 'type') return null;
-          return (
-            <input
-              key={key}
-              name={key}
-              value={value}
-              placeholder={key}
-              onChange={handleChange}
-              required={key === 'address'}
-            />
-          );
-        })}
-        <button type="submit">Submit</button>
-      </form>
-    </details>
+    <form onSubmit={handleSubmit}>
+      <h2>Create Property</h2>
+
+      <input
+        type="text"
+        placeholder="Type"
+        value={type}
+        onChange={(e) => setType(e.target.value)}
+        required
+      />
+
+      <input
+        type="text"
+        placeholder="Address"
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+        required
+      />
+
+      <input
+        type="text"
+        placeholder="Mortgage"
+        value={mortgage}
+        onChange={(e) => setMortgage(e.target.value)}
+      />
+
+      <input
+        type="text"
+        placeholder="Rent"
+        value={rent}
+        onChange={(e) => setRent(e.target.value)}
+      />
+
+      <input
+        type="text"
+        placeholder="Insurance"
+        value={insurance}
+        onChange={(e) => setInsurance(e.target.value)}
+      />
+
+      <input
+        type="text"
+        placeholder="Home Warranty"
+        value={homeWarranty}
+        onChange={(e) => setHomeWarranty(e.target.value)}
+      />
+
+      <input
+        type="text"
+        placeholder="Appliance Info"
+        value={applianceInfo}
+        onChange={(e) => setApplianceInfo(e.target.value)}
+      />
+
+      <input
+        type="text"
+        placeholder="Repair Info"
+        value={repairInfo}
+        onChange={(e) => setRepairInfo(e.target.value)}
+      />
+
+      <button type="submit">Submit</button>
+    </form>
   );
 }

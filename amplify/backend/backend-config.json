@@ -7,26 +7,24 @@
             "UserPoolId"
           ],
           "category": "auth",
-          "resourceName": "homedocs2840ad0c"
+          "resourceName": "HomeDocs"
         }
       ],
       "output": {
         "authConfig": {
           "additionalAuthenticationProviders": [
             {
-              "apiKeyConfig": {
-                "apiKeyExpirationDate": "2025-06-29T17:47:01.564Z",
-                "apiKeyExpirationDays": 7,
-                "description": "public access for testing"
-              },
-              "authenticationType": "API_KEY"
+              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+              "userPoolConfig": {
+                "userPoolId": "authHomeDocs"
+              }
             }
           ],
           "defaultAuthentication": {
-            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-            "userPoolConfig": {
-              "userPoolId": "authhomedocs2840ad0c"
-            }
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 7
+            },
+            "authenticationType": "API_KEY"
           }
         }
       },
@@ -35,7 +33,7 @@
     }
   },
   "auth": {
-    "homedocs2840ad0c": {
+    "HomeDocs": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -44,7 +42,12 @@
           "SMS"
         ],
         "passwordProtectionSettings": {
-          "passwordPolicyCharacters": [],
+          "passwordPolicyCharacters": [
+            "REQUIRES_LOWERCASE",
+            "REQUIRES_NUMBERS",
+            "REQUIRES_SYMBOLS",
+            "REQUIRES_UPPERCASE"
+          ],
           "passwordPolicyMinLength": 8
         },
         "signupAttributes": [
@@ -85,6 +88,30 @@
           "resourceName": "amplifyhosting"
         }
       ]
+    },
+    "AMPLIFY_storage_homedocs69f62428_bucketName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "homedocs69f62428"
+        }
+      ]
+    },
+    "AMPLIFY_storage_homedocs69f62428_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "homedocs69f62428"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "homedocs69f62428": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "S3",
+      "serviceType": "imported"
     }
   }
 }

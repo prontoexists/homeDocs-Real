@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { generateClient } from 'aws-amplify/api';
 import { listProperties } from '../graphql/queries';
 import { deleteProperty } from '../graphql/mutations';
-import { Property } from '../API';
 import { getCurrentUser } from 'aws-amplify/auth';
-
+import { Property } from '../API';
 const client = generateClient();
 
 interface PropertyListProps {
@@ -25,10 +24,11 @@ export default function PropertyList({ refresh }: PropertyListProps) {
           filter: {
             userID: { eq: userSub }
           }
-        }
+        },
+        authMode: 'userPool', // Ensure owner-based auth works
       }) as { data: { listProperties: { items: Property[] } } };
 
-      const items = response.data.listProperties.items ?? [];
+      const items = response.data.listProperties?.items ?? [];
       setProperties(items.filter((p: any): p is Property => p !== null));
     } catch (err) {
       console.error('Error fetching properties:', err);
@@ -42,6 +42,7 @@ export default function PropertyList({ refresh }: PropertyListProps) {
       await client.graphql({
         query: deleteProperty,
         variables: { input: { id } },
+        authMode: 'userPool', // ✅ Apply auth for deletion as well
       });
       await fetchProperties();
     } catch (err) {

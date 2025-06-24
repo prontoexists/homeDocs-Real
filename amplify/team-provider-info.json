@@ -1,28 +1,31 @@
 {
-  "dev": {
+  "prod": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-homedocs-dev-1cc83-authRole",
-      "UnauthRoleArn": "arn:aws:iam::197983471489:role/amplify-homedocs-dev-1cc83-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::197983471489:role/amplify-homedocs-dev-1cc83-authRole",
-      "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-homedocs-dev-1cc83-deployment",
-      "UnauthRoleName": "amplify-homedocs-dev-1cc83-unauthRole",
-      "StackName": "amplify-homedocs-dev-1cc83",
-      "StackId": "arn:aws:cloudformation:us-east-1:197983471489:stack/amplify-homedocs-dev-1cc83/4b6b8d30-4f90-11f0-8e58-127033c04e51",
-      "AmplifyAppId": "d28w5wr4zyo6i1"
+      "AuthRoleName": "amplify-homedocs-prod-bd9ca-authRole",
+      "UnauthRoleArn": "arn:aws:iam::197983471489:role/amplify-homedocs-prod-bd9ca-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::197983471489:role/amplify-homedocs-prod-bd9ca-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-homedocs-prod-bd9ca-deployment",
+      "UnauthRoleName": "amplify-homedocs-prod-bd9ca-unauthRole",
+      "StackName": "amplify-homedocs-prod-bd9ca",
+      "StackId": "arn:aws:cloudformation:us-east-2:197983471489:stack/amplify-homedocs-prod-bd9ca/de108730-507b-11f0-ae84-062d83e2b7d9",
+      "AmplifyAppId": "dz2dq9ul4d447"
     },
     "categories": {
+      "storage": {
+        "homedocs69f62428": {
+          "bucketName": "psrivas.com",
+          "region": "us-east-2"
+        }
+      },
       "auth": {
-        "homedocs2840ad0c": {}
+        "HomeDocs": {}
       },
       "hosting": {
         "amplifyhosting": {
-          "appId": "d28w5wr4zyo6i1",
+          "appId": "dz2dq9ul4d447",
           "type": "manual"
         }
-      },
-      "api": {
-        "homedocs": {}
       }
     }
   }
