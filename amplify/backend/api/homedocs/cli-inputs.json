@@ -4,12 +4,15 @@
     "apiName": "homedocs",
     "serviceName": "AppSync",
     "defaultAuthType": {
-      "mode": "AWS_IAM"
+      "mode": "AMAZON_COGNITO_USER_POOLS",
+      "cognitoUserPoolId": "authHomeDocs"
     },
     "additionalAuthTypes": [
       {
-        "mode": "AMAZON_COGNITO_USER_POOLS",
-        "cognitoUserPoolId": "authHomeDocs"
+        "mode": "API_KEY",
+        "expirationTime": 28,
+        "apiKeyExpirationDate": "2025-07-22T22:00:09.787Z",
+        "keyDescription": "Temporary acc"
       }
     ],
     "conflictResolution": {}

@@ -26,6 +26,9 @@
           "appId": "dz2dq9ul4d447",
           "type": "manual"
         }
+      },
+      "api": {
+        "homedocs": {}
       }
     }
   }

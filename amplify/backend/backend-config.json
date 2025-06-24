@@ -14,17 +14,19 @@
         "authConfig": {
           "additionalAuthenticationProviders": [
             {
-              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-              "userPoolConfig": {
-                "userPoolId": "authHomeDocs"
-              }
+              "apiKeyConfig": {
+                "apiKeyExpirationDate": "2025-07-22T22:00:09.787Z",
+                "apiKeyExpirationDays": 28,
+                "description": "Temporary acc"
+              },
+              "authenticationType": "API_KEY"
             }
           ],
           "defaultAuthentication": {
-            "apiKeyConfig": {
-              "apiKeyExpirationDays": 7
-            },
-            "authenticationType": "API_KEY"
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authHomeDocs"
+            }
           }
         }
       },
