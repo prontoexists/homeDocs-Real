@@ -1,14 +1,12 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "testAuthIdentityPool",
-    "allowUnauthenticatedIdentities": false,
     "resourceNameTruncated": "homedod3f08cbc",
     "userPoolName": "HomeDocs",
     "autoVerifiedAttributes": [
       "email"
     ],
-    "mfaConfiguration": "OFF",
+    "mfaConfiguration": "OPTIONAL",
     "mfaTypes": [
       "SMS Text Message"
     ],
@@ -36,7 +34,7 @@
     "userpoolClientSetAttributes": false,
     "sharedId": "d3f08cbc",
     "resourceName": "HomeDocs",
-    "authSelections": "identityPoolAndUserPool",
+    "authSelections": "userPoolOnly",
     "serviceName": "Cognito",
     "usernameAttributes": [
       "email"
@@ -45,9 +43,28 @@
     "userPoolGroups": false,
     "userPoolGroupList": [],
     "adminQueries": false,
-    "thirdPartyAuth": false,
-    "authProviders": [],
     "usernameCaseSensitive": false,
-    "useEnabledMfas": true
+    "useEnabledMfas": true,
+    "authRoleArn": {
+      "Fn::GetAtt": [
+        "AuthRole",
+        "Arn"
+      ]
+    },
+    "unauthRoleArn": {
+      "Fn::GetAtt": [
+        "UnauthRole",
+        "Arn"
+      ]
+    },
+    "breakCircularDependency": true,
+    "dependsOn": [],
+    "triggers": {},
+    "hostedUI": false,
+    "parentStack": {
+      "Ref": "AWS::StackId"
+    },
+    "permissions": [],
+    "authProviders": []
   }
 }

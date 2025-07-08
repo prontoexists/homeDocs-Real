@@ -1,39 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { generateClient } from 'aws-amplify/api';
 import { listProperties } from '../graphql/queries';
 import { deleteProperty } from '../graphql/mutations';
-import { getCurrentUser } from 'aws-amplify/auth';
-import { Property } from '../API';
+
 const client = generateClient();
 
-interface PropertyListProps {
-  refresh: boolean;
-}
+export default function PropertyList({ user }: { user: any }) {
+  const [properties, setProperties] = useState<any[]>([]);
+  const userID = user?.username;
 
-export default function PropertyList({ refresh }: PropertyListProps) {
-  const [properties, setProperties] = useState<Property[]>([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!userID) return;
 
-  const fetchProperties = async () => {
-    try {
-      const currentUser = await getCurrentUser();
-      const userSub = currentUser?.userId;
+      try {
+        const result = await client.graphql({
+          query: listProperties,
+          variables: { filter: { userID: { eq: userID } } },
+          authMode: 'userPool'
+        }) as { data: { listProperties: { items: any[] } } };
 
-      const response = await client.graphql({
-        query: listProperties,
-        variables: {
-          filter: {
-            userID: { eq: userSub }
-          }
-        },
-        authMode: 'userPool', // Ensure owner-based auth works
-      }) as { data: { listProperties: { items: Property[] } } };
+        setProperties(result.data.listProperties.items);
+      } catch (err) {
+        console.error('Error fetching properties:', err);
+      }
+    };
 
-      const items = response.data.listProperties?.items ?? [];
-      setProperties(items.filter((p: any): p is Property => p !== null));
-    } catch (err) {
-      console.error('Error fetching properties:', err);
-    }
-  };
+    fetchData();
+  }, [userID]);
 
   const handleDelete = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this property?')) return;
@@ -42,40 +36,32 @@ export default function PropertyList({ refresh }: PropertyListProps) {
       await client.graphql({
         query: deleteProperty,
         variables: { input: { id } },
-        authMode: 'userPool', // ✅ Apply auth for deletion as well
+        authMode: 'userPool'
       });
-      await fetchProperties();
+      alert('Property deleted.');
+      window.location.reload();
     } catch (err) {
-      console.error('Delete failed:', err);
+      console.error('Error deleting property:', err);
     }
   };
 
-  useEffect(() => {
-    fetchProperties();
-  }, [refresh]);
+  if (!userID) return <div>Loading properties...</div>;
 
   return (
     <div>
-      <h2>Your Properties</h2>
-      {properties.length === 0 ? (
-        <p>No properties yet.</p>
-      ) : (
-        <ul>
-          {properties.map((p) => (
-            <li key={p.id}>
-              <strong>{p.type}</strong> — {p.address}
-              <br />
-              <small>
-                Mortgage: {p.mortgage} | Rent: {p.rent} | Insurance: {p.insurance}
-                <br />
-                Warranty: {p.homeWarranty} | Appliances: {p.applianceInfo} | Repairs: {p.repairInfo}
-              </small>
-              <br />
-              <button onClick={() => handleDelete(p.id)}>Delete</button>
-            </li>
-          ))}
-        </ul>
-      )}
+      <h2>My Properties</h2>
+      {properties.map((prop) => (
+        <div key={prop.id} style={{ border: '1px solid #ccc', margin: '10px', padding: '10px' }}>
+          <h3>{prop.type} - {prop.address}</h3>
+          <p>Mortgage: {prop.mortgage}</p>
+          <p>Rent: {prop.rent}</p>
+          <p>Insurance: {prop.insurance}</p>
+          <p>Home Warranty: {prop.homeWarranty}</p>
+          <p>Appliance Info: {prop.applianceInfo}</p>
+          <p>Repair Info: {prop.repairInfo}</p>
+          <button onClick={() => handleDelete(prop.id)}>Delete</button>
+        </div>
+      ))}
     </div>
   );
 }

@@ -1,139 +1,60 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { generateClient } from 'aws-amplify/api';
-import { getCurrentUser } from 'aws-amplify/auth';
+import { createProperty } from '../graphql/mutations';
 
 const client = generateClient();
 
-interface CreatePropertyProps {
-  onSuccess: () => void;
-}
+export default function CreateProperty({ user }: { user: any }) {
+  const [formData, setFormData] = useState({
+    type: '',
+    address: '',
+    mortgage: '',
+    rent: '',
+    insurance: '',
+    homeWarranty: '',
+    applianceInfo: '',
+    repairInfo: ''
+  });
 
-export default function CreateProperty({ onSuccess }: CreatePropertyProps) {
-  const [type, setType] = useState('');
-  const [address, setAddress] = useState('');
-  const [mortgage, setMortgage] = useState('');
-  const [rent, setRent] = useState('');
-  const [insurance, setInsurance] = useState('');
-  const [homeWarranty, setHomeWarranty] = useState('');
-  const [applianceInfo, setApplianceInfo] = useState('');
-  const [repairInfo, setRepairInfo] = useState('');
+  if (!user) return <div>Loading...</div>;
+  const userID = user.username;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
+  const handleSubmit = async () => {
     try {
-      const currentUser = await getCurrentUser();
-      const userSub = currentUser?.userId;
-
       await client.graphql({
-        query: /* GraphQL */ `
-          mutation CreateProperty($input: CreatePropertyInput!) {
-            createProperty(input: $input) {
-              id
-              type
-              address
-              userID
-            }
-          }
-        `,
+        query: createProperty,
         variables: {
           input: {
-            type,
-            address,
-            mortgage,
-            rent,
-            insurance,
-            homeWarranty,
-            applianceInfo,
-            repairInfo,
-            userID: userSub,
-          },
+            ...formData,
+            userID
+          }
         },
-        authMode: 'userPool',
+        authMode: 'userPool'
       });
 
-      console.log('Property created successfully');
-      onSuccess();
-      clearForm();
+      alert('Property Saved!');
+      window.location.reload();
     } catch (err) {
-      console.error('Submission error:', err);
+      console.error('Error creating property:', err);
     }
   };
 
-  const clearForm = () => {
-    setType('');
-    setAddress('');
-    setMortgage('');
-    setRent('');
-    setInsurance('');
-    setHomeWarranty('');
-    setApplianceInfo('');
-    setRepairInfo('');
-  };
-
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Create Property</h2>
-
-      <input
-        type="text"
-        placeholder="Type"
-        value={type}
-        onChange={(e) => setType(e.target.value)}
-        required
-      />
-
-      <input
-        type="text"
-        placeholder="Address"
-        value={address}
-        onChange={(e) => setAddress(e.target.value)}
-        required
-      />
-
-      <input
-        type="text"
-        placeholder="Mortgage"
-        value={mortgage}
-        onChange={(e) => setMortgage(e.target.value)}
-      />
-
-      <input
-        type="text"
-        placeholder="Rent"
-        value={rent}
-        onChange={(e) => setRent(e.target.value)}
-      />
-
-      <input
-        type="text"
-        placeholder="Insurance"
-        value={insurance}
-        onChange={(e) => setInsurance(e.target.value)}
-      />
-
-      <input
-        type="text"
-        placeholder="Home Warranty"
-        value={homeWarranty}
-        onChange={(e) => setHomeWarranty(e.target.value)}
-      />
-
-      <input
-        type="text"
-        placeholder="Appliance Info"
-        value={applianceInfo}
-        onChange={(e) => setApplianceInfo(e.target.value)}
-      />
-
-      <input
-        type="text"
-        placeholder="Repair Info"
-        value={repairInfo}
-        onChange={(e) => setRepairInfo(e.target.value)}
-      />
-
-      <button type="submit">Submit</button>
-    </form>
+    <div>
+      <h2>Add Property</h2>
+      <input name="type" placeholder="Type" onChange={handleChange} />
+      <input name="address" placeholder="Address" onChange={handleChange} />
+      <input name="mortgage" placeholder="Mortgage Info" onChange={handleChange} />
+      <input name="rent" placeholder="Rent Info" onChange={handleChange} />
+      <input name="insurance" placeholder="Insurance Info" onChange={handleChange} />
+      <input name="homeWarranty" placeholder="Home Warranty Info" onChange={handleChange} />
+      <input name="applianceInfo" placeholder="Appliance Info" onChange={handleChange} />
+      <input name="repairInfo" placeholder="Repair Info" onChange={handleChange} />
+      <button onClick={handleSubmit}>Save Property</button>
+    </div>
   );
 }
