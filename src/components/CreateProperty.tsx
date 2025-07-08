@@ -58,4 +58,7 @@ export default function CreateProperty({ user }: { user: any }) {
       <input name="homeWarranty" placeholder="Home Warranty Info" onChange={handleChange} />
       <input name="applianceInfo" placeholder="Appliance Info" onChange={handleChange} />
       <input name="repairInfo" placeholder="Repair Info" onChange={handleChange} />
-      <button onClick={handleSub
+      <button onClick={handleSubmit}>Save Property</button>
+    </div>
+  );
+}
