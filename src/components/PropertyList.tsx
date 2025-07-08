@@ -7,7 +7,7 @@ const client = generateClient();
 
 export default function PropertyList({ user }: { user: any }) {
   const [properties, setProperties] = useState<any[]>([]);
-  const userID = user?.username;
+  const userID = user?.userId ?? user?.username;
 
   useEffect(() => {
     const fetchData = async () => {

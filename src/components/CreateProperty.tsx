@@ -17,7 +17,7 @@ export default function CreateProperty({ user }: { user: any }) {
   });
 
   if (!user) return <div>Loading...</div>;
-  const userID = user.username;
+  const userID = user?.userId ?? user?.username;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,7 +25,7 @@ export default function CreateProperty({ user }: { user: any }) {
 
   const handleSubmit = async () => {
     try {
-      await client.graphql({
+      const result = await client.graphql({
         query: createProperty,
         variables: {
           input: {
@@ -35,11 +35,15 @@ export default function CreateProperty({ user }: { user: any }) {
         },
         authMode: 'userPool'
       });
-
+      console.log('Create result:', result);
       alert('Property Saved!');
       window.location.reload();
-    } catch (err) {
-      console.error('Error creating property:', err);
+    } catch (err: any) {
+      if (err.errors) {
+        console.error('GraphQL errors:', err.errors);
+      } else {
+        console.error('Error creating property:', JSON.stringify(err, null, 2));
+      }
     }
   };
 
@@ -54,7 +58,4 @@ export default function CreateProperty({ user }: { user: any }) {
       <input name="homeWarranty" placeholder="Home Warranty Info" onChange={handleChange} />
       <input name="applianceInfo" placeholder="Appliance Info" onChange={handleChange} />
       <input name="repairInfo" placeholder="Repair Info" onChange={handleChange} />
-      <button onClick={handleSubmit}>Save Property</button>
-    </div>
-  );
-}
+      <button onClick={handleSub
