@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, CSSProperties } from 'react';
 import { generateClient } from 'aws-amplify/api';
 import { createProperty } from '../graphql/mutations';
 
@@ -49,7 +49,16 @@ export default function CreateProperty({ user }: { user: any }) {
     }
   };
 
-  const inputStyle = { width: '300px', padding: '8px', marginBottom: '10px' };
+  const inputStyle: CSSProperties = {
+    width: '300px',
+    padding: '8px',
+    marginBottom: '10px'
+  };
+
+  const resizableStyle: CSSProperties = {
+    ...inputStyle,
+    resize: 'both'
+  };
 
   return (
     <div>
@@ -65,47 +74,49 @@ export default function CreateProperty({ user }: { user: any }) {
         placeholder="Address"
         rows={2}
         onChange={handleChange}
-        style={inputStyle}
+        style={resizableStyle}
       />
-      <input
+      <textarea
         name="mortgage"
         placeholder="Mortgage Info"
+        rows={2}
         onChange={handleChange}
-        style={inputStyle}
+        style={resizableStyle}
       />
-      <input
+      <textarea
         name="rent"
         placeholder="Rent Info"
+        rows={2}
         onChange={handleChange}
-        style={inputStyle}
+        style={resizableStyle}
       />
       <textarea
         name="insurance"
         placeholder="Insurance Info"
         rows={2}
         onChange={handleChange}
-        style={inputStyle}
+        style={resizableStyle}
       />
       <textarea
         name="homeWarranty"
         placeholder="Home Warranty Info"
         rows={2}
         onChange={handleChange}
-        style={inputStyle}
+        style={resizableStyle}
       />
       <textarea
         name="applianceInfo"
         placeholder="Appliance Info"
         rows={3}
         onChange={handleChange}
-        style={inputStyle}
+        style={resizableStyle}
       />
       <textarea
         name="repairInfo"
         placeholder="Repair Info"
         rows={3}
         onChange={handleChange}
-        style={inputStyle}
+        style={resizableStyle}
       />
       <br />
       <button onClick={handleSubmit}>Save Property</button>
