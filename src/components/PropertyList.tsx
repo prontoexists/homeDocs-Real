@@ -45,13 +45,38 @@ export default function PropertyList({ user }: { user: any }) {
     }
   };
 
+  const exportProperty = (prop: any) => {
+    const textContent = `
+Property ID: ${prop.id}
+Type: ${prop.type}
+Address: ${prop.address}
+Mortgage: ${prop.mortgage}
+Rent: ${prop.rent}
+Insurance: ${prop.insurance}
+Home Warranty: ${prop.homeWarranty}
+Appliance Info: ${prop.applianceInfo}
+Repair Info: ${prop.repairInfo}
+    `.trim();
+
+    const blob = new Blob([textContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `property-${prop.id}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   if (!userID) return <div>Loading properties...</div>;
 
   return (
     <div>
       <h2>My Properties</h2>
       {properties.map((prop) => (
-        <div key={prop.id} style={{ border: '1px solid #ccc', margin: '10px', padding: '10px' }}>
+        <div
+          key={prop.id}
+          style={{ border: '1px solid #ccc', margin: '10px', padding: '10px' }}
+        >
           <h3>{prop.type} - {prop.address}</h3>
           <p>Mortgage: {prop.mortgage}</p>
           <p>Rent: {prop.rent}</p>
@@ -59,7 +84,12 @@ export default function PropertyList({ user }: { user: any }) {
           <p>Home Warranty: {prop.homeWarranty}</p>
           <p>Appliance Info: {prop.applianceInfo}</p>
           <p>Repair Info: {prop.repairInfo}</p>
-          <button onClick={() => handleDelete(prop.id)}>Delete</button>
+          <button onClick={() => handleDelete(prop.id)} style={{ marginRight: '10px' }}>
+            Delete
+          </button>
+          <button onClick={() => exportProperty(prop)}>
+            Export
+          </button>
         </div>
       ))}
     </div>

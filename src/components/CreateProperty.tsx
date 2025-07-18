@@ -19,7 +19,9 @@ export default function CreateProperty({ user }: { user: any }) {
   if (!user) return <div>Loading...</div>;
   const userID = user?.userId ?? user?.username;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -47,17 +49,65 @@ export default function CreateProperty({ user }: { user: any }) {
     }
   };
 
+  const inputStyle = { width: '300px', padding: '8px', marginBottom: '10px' };
+
   return (
     <div>
       <h2>Add Property</h2>
-      <input name="type" placeholder="Type" onChange={handleChange} />
-      <input name="address" placeholder="Address" onChange={handleChange} />
-      <input name="mortgage" placeholder="Mortgage Info" onChange={handleChange} />
-      <input name="rent" placeholder="Rent Info" onChange={handleChange} />
-      <input name="insurance" placeholder="Insurance Info" onChange={handleChange} />
-      <input name="homeWarranty" placeholder="Home Warranty Info" onChange={handleChange} />
-      <input name="applianceInfo" placeholder="Appliance Info" onChange={handleChange} />
-      <input name="repairInfo" placeholder="Repair Info" onChange={handleChange} />
+      <input
+        name="type"
+        placeholder="Type"
+        onChange={handleChange}
+        style={inputStyle}
+      />
+      <textarea
+        name="address"
+        placeholder="Address"
+        rows={2}
+        onChange={handleChange}
+        style={inputStyle}
+      />
+      <input
+        name="mortgage"
+        placeholder="Mortgage Info"
+        onChange={handleChange}
+        style={inputStyle}
+      />
+      <input
+        name="rent"
+        placeholder="Rent Info"
+        onChange={handleChange}
+        style={inputStyle}
+      />
+      <textarea
+        name="insurance"
+        placeholder="Insurance Info"
+        rows={2}
+        onChange={handleChange}
+        style={inputStyle}
+      />
+      <textarea
+        name="homeWarranty"
+        placeholder="Home Warranty Info"
+        rows={2}
+        onChange={handleChange}
+        style={inputStyle}
+      />
+      <textarea
+        name="applianceInfo"
+        placeholder="Appliance Info"
+        rows={3}
+        onChange={handleChange}
+        style={inputStyle}
+      />
+      <textarea
+        name="repairInfo"
+        placeholder="Repair Info"
+        rows={3}
+        onChange={handleChange}
+        style={inputStyle}
+      />
+      <br />
       <button onClick={handleSubmit}>Save Property</button>
     </div>
   );
