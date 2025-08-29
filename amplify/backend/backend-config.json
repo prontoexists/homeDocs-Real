@@ -78,12 +78,5 @@
       ]
     }
   },
-  "storage": {
-    "homedocsreale354822b": {
-      "dependsOn": [],
-      "providerPlugin": "awscloudformation",
-      "service": "S3",
-      "serviceType": "imported"
-    }
-  }
+  "storage": {}
 }
