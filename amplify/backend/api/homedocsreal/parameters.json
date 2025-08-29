@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "homedocsreal",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authhomedocsreal6c599222",
+      "Outputs.UserPoolId"
+    ]
+  }
+}

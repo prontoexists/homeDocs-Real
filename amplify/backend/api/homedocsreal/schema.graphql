@@ -1,0 +1,79 @@
+type User @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  email: AWSEmail!
+  phone: AWSPhone
+  dob: AWSDate
+  properties: [Property] @hasMany(indexName: "byUser", fields: ["id"])
+  people: [Person] @hasMany
+  businesses: [Business] @hasMany
+}
+
+type Property @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  type: String!
+  address: String!
+  mortgage: String
+  rent: String
+  insurance: String
+  homeWarranty: String
+  applianceInfo: String
+  repairInfo: String
+  items: [Item] @hasMany(indexName: "byProperty", fields: ["id"])
+  userID: ID! @index(name: "byUser")
+  user: User @belongsTo(fields: ["userID"])
+}
+
+type Item 
+  @model 
+  @auth(rules: [
+    { allow: owner, operations: [create, read, update, delete] },
+    { allow: public, operations: [read] }
+  ]) {
+  id: ID!
+  name: String!
+  make: String
+  material: String
+  purchaseYear: Int
+  warrantyExpiry: AWSDate
+  tags: [String]
+  location: String
+  propertyID: ID! @index(name: "byProperty")
+  property: Property @belongsTo(fields: ["propertyID"])
+}
+
+type Person 
+  @model 
+  @auth(rules: [
+    { allow: owner, operations: [create, read, update, delete] },
+    { allow: public, operations: [read] }
+  ]) {
+  id: ID!
+  category: String!
+  name: String!
+  contactInfo: String
+  schoolInfo: String
+  collegeInfo: String
+  jobInfo: String
+  bankInfo: String
+  financialInfo: String
+  personalInfo: String
+  userID: ID! @index(name: "byUser")
+  user: User @belongsTo(fields: ["userID"])
+}
+
+type Business 
+  @model 
+  @auth(rules: [
+    { allow: owner, operations: [create, read, update, delete] },
+    { allow: public, operations: [read] }
+  ]) {
+  id: ID!
+  category: String!
+  name: String!
+  contactInfo: String
+  pastOrderInfo: String
+  financialInfo: String
+  previousJobInfo: String
+  userID: ID! @index(name: "byUser")
+  user: User @belongsTo(fields: ["userID"])
+}
