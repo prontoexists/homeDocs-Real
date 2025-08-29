@@ -8,8 +8,8 @@
       "DeploymentBucketName": "amplify-homedocs-prod-bd9ca-deployment",
       "UnauthRoleName": "amplify-homedocs-prod-bd9ca-unauthRole",
       "StackName": "amplify-homedocs-prod-bd9ca",
-      "StackId": "arn:aws:cloudformation:us-east-2:197983471489:stack/amplify-homedocs-prod-bd9ca/88689730-8502-11f0-a21a-066b4151c05f",
-      "AmplifyAppId": "df8dg1ght4zbp"
+      "StackId": "arn:aws:cloudformation:us-east-2:197983471489:stack/amplify-homedocs-prod-bd9ca/de108730-507b-11f0-ae84-062d83e2b7d9",
+      "AmplifyAppId": "dz2dq9ul4d447"
     },
     "categories": {
       "storage": {
@@ -20,6 +20,12 @@
       },
       "auth": {
         "HomeDocs": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "dz2dq9ul4d447",
+          "type": "manual"
+        }
       },
       "api": {
         "homedocs": {}
