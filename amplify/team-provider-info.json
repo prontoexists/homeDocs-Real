@@ -19,7 +19,8 @@
         }
       },
       "auth": {
-        "HomeDocs": {}
+        "HomeDocs": {},
+        "homedocsreal6c599222": {}
       },
       "api": {
         "homedocs": {}
